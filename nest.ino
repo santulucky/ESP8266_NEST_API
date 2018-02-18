@@ -18,9 +18,9 @@
 
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
-
-const char* ssid = "WIFI_SSID";
-const char* password = "WIFI_PASSWORD";
+#include <ESP8266WebServer.h>
+#include <DNSServer.h>
+#include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager
 
 //const char* host = "api.home.nest.com";//for getting access token
 const char* host = "developer-api.nest.com"; //for controlling
@@ -33,18 +33,9 @@ const char* thermostat_id="/devices/thermostats/THERMOSTAT_ID";
 void setup() {
 	Serial.begin(115200);
 	Serial.println();
-	Serial.print("connecting to ");
-	Serial.println(ssid);
-	WiFi.mode(WIFI_STA);
-	WiFi.begin(ssid, password);
-	while (WiFi.status() != WL_CONNECTED) {
-		delay(500);
-		Serial.print(".");
-	}
-	Serial.println("");
-	Serial.println("WiFi connected");
-	Serial.println("IP address: ");
-	Serial.println(WiFi.localIP());
+
+	WiFiManager wifiManager;
+	wifiManager.autoConnect("ESP_NEST_CONTROLLER");
 
 	// Use WiFiClientSecure class to create TLS connection
 	WiFiClientSecure client;
